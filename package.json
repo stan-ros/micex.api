@@ -1,0 +1,19 @@
+{
+  "name": "micex.api",
+  "version": "1.0.0",
+  "description": "MICEX API ISS",
+  "main": " ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sklyukin/micex.api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sklyukin/micex.api/issues"
+  },
+  "homepage": "https://github.com/sklyukin/micex.api#readme"
+}
