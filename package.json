@@ -4,7 +4,7 @@
   "description": "MICEX API ISS",
   "main": " ",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/sklyukin/micex.api/issues"
   },
-  "homepage": "https://github.com/sklyukin/micex.api#readme"
+  "homepage": "https://github.com/sklyukin/micex.api#readme",
+  "dependencies": {
+    "babel": "^5.8.21",
+    "request": "^2.60.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5"
+  }
 }
