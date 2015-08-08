@@ -127,7 +127,7 @@ describe('MICEX. ', () => {
     });
 
     it('Caching security info', () => {
-      return Micex._getSecurityInfo('USD000UTSTOM')
+      return Micex.getSecurityInfo('USD000UTSTOM')
         .then((security) => {
           should.exist(security);
           should.exist(security.engine);
@@ -145,7 +145,6 @@ describe('MICEX. ', () => {
     it('USD Today', () => {
       return Micex.securityMarketdata('USD000UTSTOM')
         .then((security) => {
-          console.log(security);
           should.exist(security);
           should.exist(security.node.last);
           securityPrint(security);
