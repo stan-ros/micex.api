@@ -50,7 +50,7 @@ describe('MICEX. ', () => {
         });
     });
 
-    it.only('Pagination should works for securities method', function() {
+    it('Pagination should works for securities method', function() {
       this.timeout(4000);
       return Micex.securities()
         .then((firstPageSecurites) => {
