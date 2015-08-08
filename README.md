@@ -34,3 +34,27 @@ part of output
   CLOSEPRICE: 63.8399,
   NUMTRADES: 58453,
 ```
+
+##More examples
+```js
+Micex.securityMarketdata('MICEXINDEXCF'); //MICEX INDEX
+Micex.securityMarketdata('RTSI'); //RTS INDEX
+Micex.securityMarketdata('SBER'; //SBERBANK SHARES
+Micex.securityMarketdata('RIU5'); //FUTURES RTS 9.15
+```
+
+##Available methods
+```js
+Micex.engines;
+Micex.markets(engine);
+Micex.boards(engine, market);
+Micex.securitiesDefinitions(query);
+Micex.securityDefinition(security);
+Micex.securitiesMarketData(engine, market, query);
+Micex.securitiesDataRaw(engine, market, query);
+Micex.getSecurityInfo(security);
+Micex.securityMarketData(security);
+```
+##More info
+Micex class - [lib/mices.js](lib/micex.js)   
+Usage examples / tests - [test/micex.spec.js](test/micex.spec.js)
