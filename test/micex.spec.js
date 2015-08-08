@@ -13,7 +13,7 @@ describe('MICEX. ', () => {
       })
   });
 
-  it('Engines. Should be at least 3, should have stock engine.', () => {
+  it('Engines. Should be at least 3, should have stock engine', () => {
     return Micex.engines()
       .then((engines) => {
         engines.should.have.length.least(3);
@@ -28,6 +28,14 @@ describe('MICEX. ', () => {
         markets.should.have.length.least(5);
         let sharesMarket = markets.find( market => market.NAME === 'shares');
         should.exist(sharesMarket);
+      })
+  });
+
+  it.only('Boards. Should return ETC board for currency/selt engine/market', () => {
+    return Micex.boards('currency', 'selt')
+      .then((boards) => {
+        let board = boards.find( board => board.boardid === 'CETS' && board.title === 'ETC');
+        should.exist(board);
       })
   });
 });
