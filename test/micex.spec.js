@@ -1,8 +1,10 @@
 import Micex from '../lib/micex';
+import _ from 'lodash';
 let should = require('chai').should();
 
 describe('MICEX. ', () => {
   describe('General. ', () => {
+
     it('General request', () => {
       should.exist(Micex);
       should.exist(Micex._request);
@@ -44,7 +46,7 @@ describe('MICEX. ', () => {
   describe('Securities. ', () => {
 
     it('Should contains at least 50 securities', () => {
-      return Micex.securities()
+      return Micex.securitiesDefinitions()
         .then((securities) => {
           securities.should.have.length.least(50);
         });
@@ -52,9 +54,9 @@ describe('MICEX. ', () => {
 
     it('Pagination should works for securities method', function() {
       this.timeout(4000);
-      return Micex.securities()
+      return Micex.securitiesDefinitions()
         .then((firstPageSecurites) => {
-          return Micex.securities({
+          return Micex.securitiesDefinitions({
               start: 100
             })
             .then((securities) => {
@@ -66,13 +68,43 @@ describe('MICEX. ', () => {
 
 
     it('Should give specific security -  USD000UTSTOM ', () => {
-      return Micex.security('USD000UTSTOM')
+      return Micex.securityDefinition('USD000UTSTOM')
         .then((security) => {
           should.exist(security);
           should.exist(security.description);
           should.exist(security.boards);
           should.exist(security.boards.CETS);
         })
+    });
+  });
+
+  describe('Marketdata. ', () => {
+
+    it('Should have securities data for currency/selt', () => {
+      return Micex.securitiesDataRaw('currency', 'selt')
+        .then((response) => {
+          should.exist(response);
+          should.exist(response.securities);
+          should.exist(response.securities.data);
+          response.securities.data.should.have.length.least(50);
+          should.exist(response.marketdata);
+          should.exist(response.marketdata.data);
+          response.marketdata.data.should.have.length.least(50);
+        });
+    })
+
+    it('Should return only 10 rows', () => {
+      return Micex.securitiesDataRaw('currency', 'selt', {first: 10})
+        .then((response) => {
+          response.marketdata.data.length.should.be.eql(10);
+        });
+    });
+
+    it('Should return only 4 rows', () => {
+      return Micex.securitiesMarketdata('currency', 'selt', {first: 4})
+        .then((marketdata) => {
+          Object.values(marketdata).length.should.be.eql(4);
+        });
     });
   });
 });
