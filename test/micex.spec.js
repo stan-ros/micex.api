@@ -100,7 +100,7 @@ describe('MICEX. ', () => {
         });
     });
 
-    it('Should return only 4 rows', () => {
+    it('marketdata should return only 4 rows with max VALTODAY_RUR', () => {
       return Micex.securitiesMarketdata('currency', 'selt', {first: 4})
         .then((marketdata) => {
           Object.values(marketdata).length.should.be.eql(4);
