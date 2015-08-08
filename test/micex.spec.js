@@ -94,16 +94,96 @@ describe('MICEX. ', () => {
     })
 
     it('Should return only 10 rows', () => {
-      return Micex.securitiesDataRaw('currency', 'selt', {first: 10})
+      return Micex.securitiesDataRaw('currency', 'selt', {
+          first: 10
+        })
         .then((response) => {
           response.marketdata.data.length.should.be.eql(10);
         });
     });
 
-    it('marketdata should return only 4 rows with max VALTODAY_RUR', () => {
-      return Micex.securitiesMarketdata('currency', 'selt', {first: 4})
+    it('Marketdata should return only 4 rows with max VALTODAY_RUR', () => {
+      return Micex.securitiesMarketdata('currency', 'selt', {
+          first: 4
+        })
         .then((marketdata) => {
           Object.values(marketdata).length.should.be.eql(4);
+        });
+    });
+
+    it('Should return one security in few boards', () => {
+      return Micex.securityDataRawExplicit('currency', 'selt', 'USD000UTSTOM');
+    });
+
+    it('Should return marketdata for one security', () => {
+      return Micex.securityMarketdataExplicit('currency', 'selt', 'USD000UTSTOM')
+        .then((security) => {
+          should.exist(security);
+          //last price
+          should.exist(security.LAST);
+          //volume today in RUR
+          should.exist(security.VALTODAY_RUR);
+        });
+    });
+
+    it('Caching security info', () => {
+      return Micex._getSecurityInfo('USD000UTSTOM')
+        .then((security) => {
+          should.exist(security);
+          should.exist(security.engine);
+          should.exist(security.market);
+        });
+    });
+  });
+
+  describe('Marketdata specific securities. ', () => {
+    function securityPrint(security) {
+      return;
+      console.log(`${security.node.id} price: ${security.node.last}`);
+    }
+
+    it('USD Today', () => {
+      return Micex.securityMarketdata('USD000UTSTOM')
+        .then((security) => {
+          should.exist(security);
+          should.exist(security.node.last);
+          securityPrint(security);
+        });
+    });
+
+    it('MICEX Index', () => {
+      return Micex.securityMarketdata('MICEXINDEXCF')
+        .then((security) => {
+          should.exist(security);
+          should.exist(security.node.last);
+          securityPrint(security);
+        });
+    });
+
+    it('RTS Index', () => {
+      return Micex.securityMarketdata('RTSI')
+        .then((security) => {
+          should.exist(security);
+          should.exist(security.node.last);
+          securityPrint(security);
+        });
+    });
+
+    it('Sberbank', () => {
+      return Micex.securityMarketdata('SBER')
+        .then((security) => {
+          should.exist(security);
+          should.exist(security.node.last);
+          securityPrint(security);
+        });
+    });
+
+    it('Futures RTS 9.15', () => {
+      return Micex.securityMarketdata('RIU5')
+        .then((security) => {
+          should.exist(security);
+          should.exist(security.node.last);
+          securityPrint(security);
         });
     });
   });
