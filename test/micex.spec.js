@@ -145,6 +145,7 @@ describe('MICEX. ', () => {
     it('USD Today', () => {
       return Micex.securityMarketdata('USD000UTSTOM')
         .then((security) => {
+          console.log(security);
           should.exist(security);
           should.exist(security.node.last);
           securityPrint(security);

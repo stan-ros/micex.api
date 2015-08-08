@@ -8,25 +8,29 @@ Micex (MOEX) ISS API
 Доступ к данным ММВБ через ISS API.
 
 ##Request example
-Get list of markets in `stocks` engine.  
+Get current USD/RUB value.  
+
 ```js
-Micex.markets('stocks')
-  .then(function (markets){
-    console.log(markets)
+Micex.securityMarketdata('USD000UTSTOM')
+  .then(function (security){
+     console.log(security.node.last); // e.g. 64.04
+     console.log(security);
   });
 ```
 
-response
+part of output
 ```js
-[ { id: 5, NAME: 'index', title: 'Индексы фондового рынка' },
-  { id: 1, NAME: 'shares', title: 'Рынок акций' },
-  { id: 2, NAME: 'bonds', title: 'Рынок облигаций' },
-  { id: 4, NAME: 'ndm', title: 'Режим переговорных сделок' },
-  { id: 29, NAME: 'otc', title: 'ОТС' },
-  { id: 27, NAME: 'ccp', title: 'РЕПО с ЦК' },
-  { id: 3, NAME: 'repo', title: 'Рынок сделок РЕПО' },
-  { id: 28, NAME: 'qnv', title: 'Квал. инвесторы' },
-  { id: 33, NAME: 'moexboard', title: 'MOEX Board' },
-  { id: 25, NAME: 'classica', title: 'Classica' },
-  { id: 23, NAME: 'standard', title: 'Standard' } ]
+{ SPREAD: 0.009,
+  HIGH: 64.7,
+  LOW: 63.455,
+  OPEN: 64.098,
+  LAST: 64.04,
+  LASTCNGTOLASTWAPRICE: -0.0359,
+  VALTODAY: 303942518535,
+  VOLTODAY: 4738709000,
+  VALTODAY_USD: 4738709000,
+  WAPRICE: 64.1404,
+  WAPTOPREVWAPRICE: 0.0645,
+  CLOSEPRICE: 63.8399,
+  NUMTRADES: 58453,
 ```
