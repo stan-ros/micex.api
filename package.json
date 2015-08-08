@@ -18,6 +18,7 @@
   "homepage": "https://github.com/sklyukin/micex.api#readme",
   "dependencies": {
     "babel": "^5.8.21",
+    "lodash": "^3.10.1",
     "request": "^2.60.0"
   },
   "devDependencies": {
