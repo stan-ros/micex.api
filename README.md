@@ -62,5 +62,5 @@ Micex.getSecurityInfo(security);
 Micex.securityMarketData(security);
 ```
 ## More info
-Micex class - [lib/mices.js](lib/micex.js)
+Micex class - [lib/mices.js](lib/micex.js)  
 Usage examples / tests - [test/micex.spec.js](test/micex.spec.js)
