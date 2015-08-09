@@ -7,6 +7,12 @@ Micex (MOEX) ISS API
 #### ru
 Доступ к данным ММВБ через ISS API.
 
+## Installation
+`npm install micex.api`
+```js
+  Micex = require('micex.api');
+```
+
 ## Request example
 Get current USD/RUB value.  
 
