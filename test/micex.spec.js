@@ -102,12 +102,19 @@ describe('MICEX. ', () => {
         });
     });
 
-    it('Marketdata should return only 4 rows with max VALTODAY_RUR', () => {
+    it('Marketdata should return only 4 rows with max VALTODAY', () => {
       return Micex.securitiesMarketdata('currency', 'selt', {
           first: 4
         })
         .then((marketdata) => {
           Object.values(marketdata).length.should.be.eql(4);
+        });
+    });
+
+    it('Marketdata should return max VALTODAY', () => {
+      return Micex.securitiesMarketdata('stock', 'index')
+        .then((marketdata) => {
+          Object.values(marketdata).length.should.be.least(10);
         });
     });
 

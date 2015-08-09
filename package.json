@@ -1,6 +1,6 @@
 {
   "name": "micex.api",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "MICEX API ISS",
   "main": "lib/micex.js",
   "scripts": {

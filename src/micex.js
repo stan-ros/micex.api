@@ -19,7 +19,9 @@ class Micex {
    */
   static securityMarketdata(security = required('security')) {
     return Micex.getSecurityInfo(security)
-      .then( ({engine, market}) => {
+      .then(({
+        engine, market
+      }) => {
         return Micex.securityMarketdataExplicit(engine, market, security);
       })
   }
@@ -51,10 +53,7 @@ class Micex {
         rows.sort((a, b) => b.VALTODAY_RUR - a.VALTODAY_RUR);
         if (!rows.length) return null;
         let row = rows[0];
-        row.node = {
-            last: row.LAST  || row.LASTVALUE,
-            id: row.SECID
-         }
+        Micex._securityCustomFields(row);
         return row;
       });
   }
@@ -65,9 +64,10 @@ class Micex {
 
   //return marketdata grouped by security id (board with most trading volume is selected from data)
   static securitiesMarketdata(engine = required('engine'), market = required('market'), query = {}) {
+    const ORDERING_COLUMN = "VALTODAY";
     if (!query.sort_column) {
       query.sort_order = 'desc';
-      query.sort_column = "VALTODAY_RUR";
+      query.sort_column = ORDERING_COLUMN;
     }
     let first = null;
     if (query.first) {
@@ -80,19 +80,20 @@ class Micex {
         let marketdata = response.marketdata;
         let rows = marketdata.data.map(
           (data) => array_combine(marketdata.columns, data));
-
+        //let's add calculated fields
+        Micex._securitiesCustomFields(rows);
         let data = {};
         for (let row of rows) {
           let secID = row.SECID;
           //so we use board with max VALTODAY for quotes
-          if (row.LAST && (!data[secID] || data[secID].VALTODAY_RUR < row.VALTODAY_RUR)) {
+          if (row.node.last && (!data[secID] || data[secID][ORDERING_COLUMN] < row[ORDERING_COLUMN])) {
             data[secID] = row;
           }
         }
 
         if (first) {
           rows = _.values(data);
-          rows.sort((a, b) => b.VALTODAY_RUR - a.VALTODAY_RUR);
+          rows.sort((a, b) => b[ORDERING_COLUMN] - a[ORDERING_COLUMN]);
 
           rows = rows.slice(0, first);
           data = _.indexBy(rows, 'SECID');
@@ -151,6 +152,17 @@ class Micex {
     let data = response.data;
     let objects = data.map((object) => array_combine(columns, object));
     return objects;
+  }
+
+  static _securitiesCustomFields(securities){
+    securities.forEach(Micex._securityCustomFields);
+  }
+
+  static _securityCustomFields(security) {
+    security.node = {
+      last: security.LAST || security.LASTVALUE,
+      id: security.SECID
+    }
   }
 
   static _request(method, query = {}) {
