@@ -1,10 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-exports['default'] = function (keys, values) {
+export default (keys, values) => {
   //  discuss at: http://phpjs.org/functions/array_combine/
   // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
   // improved by: Brett Zamir (http://brett-zamir.me)
@@ -12,13 +6,12 @@ exports['default'] = function (keys, values) {
   //   returns 1: {0: 'kevin', 1: 'van', 2: 'zonneveld'}
 
   var new_array = {},
-      keycount = keys && keys.length,
-      i = 0;
+    keycount = keys && keys.length,
+    i = 0;
 
   // input sanitation
   if (typeof keys !== 'object' || typeof values !== 'object' || // Only accept arrays or array-like objects
-  typeof keycount !== 'number' || typeof values.length !== 'number' || !keycount) {
-    // Require arrays to have a count
+    typeof keycount !== 'number' || typeof values.length !== 'number' || !keycount) { // Require arrays to have a count
     return false;
   }
 
@@ -32,6 +25,4 @@ exports['default'] = function (keys, values) {
   }
 
   return new_array;
-};
-
-module.exports = exports['default'];
+}

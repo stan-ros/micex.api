@@ -1,4 +1,4 @@
-import Micex from '../lib/micex';
+import Micex from '../src/micex';
 import _ from 'lodash';
 let should = require('chai').should();
 

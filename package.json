@@ -1,10 +1,12 @@
 {
   "name": "micex.api",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "description": "MICEX API ISS",
-  "main": " ",
+  "main": "lib/micex.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "compile": "babel src --out-dir lib",
+    "prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -17,11 +19,11 @@
   },
   "homepage": "https://github.com/sklyukin/micex.api#readme",
   "dependencies": {
-    "babel": "^5.8.21",
     "lodash": "^3.10.1",
     "request": "^2.60.0"
   },
   "devDependencies": {
+    "babel": "^5.8.21",
     "chai": "^3.2.0",
     "mocha": "^2.2.5"
   }

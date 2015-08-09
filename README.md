@@ -4,10 +4,10 @@
 Micex (MOEX) ISS API  
 [http://moex.com/iss/reference/](http://moex.com/iss/reference/)
 
-####ru
+#### ru
 Доступ к данным ММВБ через ISS API.
 
-##Request example
+## Request example
 Get current USD/RUB value.  
 
 ```js
@@ -35,7 +35,7 @@ part of output
   NUMTRADES: 58453,
 ```
 
-##More examples
+## More examples
 ```js
 Micex.securityMarketdata('MICEXINDEXCF'); //MICEX INDEX
 Micex.securityMarketdata('RTSI'); //RTS INDEX
@@ -43,7 +43,7 @@ Micex.securityMarketdata('SBER'; //SBERBANK SHARES
 Micex.securityMarketdata('RIU5'); //FUTURES RTS 9.15
 ```
 
-##Available methods
+## Available methods
 ```js
 Micex.engines;
 Micex.markets(engine);
@@ -55,6 +55,6 @@ Micex.securitiesDataRaw(engine, market, query);
 Micex.getSecurityInfo(security);
 Micex.securityMarketData(security);
 ```
-##More info
-Micex class - [lib/mices.js](lib/micex.js)   
+## More info
+Micex class - [lib/mices.js](lib/micex.js)
 Usage examples / tests - [test/micex.spec.js](test/micex.spec.js)
