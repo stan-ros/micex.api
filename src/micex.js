@@ -161,6 +161,7 @@ class Micex {
   static _securityCustomFields(security) {
     security.node = {
       last: security.LAST || security.LASTVALUE,
+      volume: security.VALTODAY_RUR || security.VALTODAY || security.VALTODAY_USD,
       id: security.SECID
     }
   }

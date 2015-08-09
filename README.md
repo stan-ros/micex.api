@@ -46,7 +46,7 @@ part of output
 Micex.securityMarketdata('MICEXINDEXCF'); //MICEX INDEX
 Micex.securityMarketdata('RTSI'); //RTS INDEX
 Micex.securityMarketdata('SBER'; //SBERBANK SHARES
-Micex.securityMarketdata('RIU5'); //FUTURES RTS 9.15
+Micex.securityMarketdata('RIZ5'); //FUTURES RTS 12.15
 ```
 
 ## Available methods

@@ -154,6 +154,7 @@ describe('MICEX. ', () => {
         .then((security) => {
           should.exist(security);
           should.exist(security.node.last);
+          should.exist(security.node.volume);
           securityPrint(security);
         });
     });
@@ -163,6 +164,7 @@ describe('MICEX. ', () => {
         .then((security) => {
           should.exist(security);
           should.exist(security.node.last);
+          should.exist(security.node.volume);
           securityPrint(security);
         });
     });
@@ -172,6 +174,7 @@ describe('MICEX. ', () => {
         .then((security) => {
           should.exist(security);
           should.exist(security.node.last);
+          should.exist(security.node.volume);
           securityPrint(security);
         });
     });
@@ -181,15 +184,17 @@ describe('MICEX. ', () => {
         .then((security) => {
           should.exist(security);
           should.exist(security.node.last);
+          should.exist(security.node.volume);
           securityPrint(security);
         });
     });
 
-    it('Futures RTS 9.15', () => {
-      return Micex.securityMarketdata('RIU5')
+    it('Futures RTS 12.15', () => {
+      return Micex.securityMarketdata('RIZ5')
         .then((security) => {
           should.exist(security);
           should.exist(security.node.last);
+          should.exist(security.node.volume);
           securityPrint(security);
         });
     });
