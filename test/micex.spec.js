@@ -147,58 +147,25 @@ describe('MICEX. ', () => {
 
   describe('Marketdata specific securities. ', () => {
     function securityPrint(security) {
+      // console.log(security.node);
       return;
-      // console.log(`${security.node.id} price: ${security.node.last}`);
     }
 
-    it('USD Today', () => {
-      return Micex.securityMarketdata('USD000UTSTOM')
+    function securityTest(securityName) {
+      return Micex.securityMarketdata(securityName)
         .then((security) => {
+          securityPrint(security);
           should.exist(security);
           should.exist(security.node.last);
           should.exist(security.node.volume);
-          securityPrint(security);
+          should.exist(security.node.friendlyTitle);
         });
-    });
+    }
 
-    it('MICEX Index', () => {
-      return Micex.securityMarketdata('MICEXINDEXCF')
-        .then((security) => {
-          should.exist(security);
-          should.exist(security.node.last);
-          should.exist(security.node.volume);
-          securityPrint(security);
-        });
-    });
-
-    it('RTS Index', () => {
-      return Micex.securityMarketdata('RTSI')
-        .then((security) => {
-          should.exist(security);
-          should.exist(security.node.last);
-          should.exist(security.node.volume);
-          securityPrint(security);
-        });
-    });
-
-    it('Sberbank', () => {
-      return Micex.securityMarketdata('SBER')
-        .then((security) => {
-          should.exist(security);
-          should.exist(security.node.last);
-          should.exist(security.node.volume);
-          securityPrint(security);
-        });
-    });
-
-    it('Futures RTS 12.15', () => {
-      return Micex.securityMarketdata('RIZ5')
-        .then((security) => {
-          should.exist(security);
-          should.exist(security.node.last);
-          should.exist(security.node.volume);
-          securityPrint(security);
-        });
-    });
+    it('USD Today', () => securityTest('USD000UTSTOM'));
+    it('MICEX Index', () => securityTest('MICEXINDEXCF'));
+    it('RTS Index', () => securityTest('RTSI'));
+    it('Sberbank', () => securityTest('SBER'));
+    it('Futures RTS 12.15', () => securityTest('RIZ5'));
   });
 });

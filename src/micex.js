@@ -9,6 +9,7 @@ function required(parameter = '') {
 
 const API_BASE = 'http://www.micex.ru/iss/';
 const SECURITY_INFO = {};
+const SECURITIES_ORDERING_COLUMN = 'VALTODAY';
 
 class Micex {
   /*
@@ -50,16 +51,15 @@ class Micex {
     market = required('market'), security = required('security')) {
     return Micex.securityDataRawExplicit(engine, market, security)
       .then((response) => {
-        let marketdata = response.marketdata;
-        let rows = marketdata.data.map(
-          (data) => arrayCombine(marketdata.columns, data));
-        rows.sort((a, b) => b.VALTODAY_RUR - a.VALTODAY_RUR);
+        let rows = Micex._responseToSecurities(response, {
+          engine, market
+        });
+        rows = _.sortByOrder(rows, SECURITIES_ORDERING_COLUMN, 'desc');
         if (!rows.length) return null;
-        let row = rows[0];
-        Micex._securityCustomFields(row);
-        return row;
+        return rows[0];
       });
   }
+
 
   static securityDataRawExplicit(engine = required('engine'),
     market = required('market'), security = required('security')) {
@@ -71,10 +71,11 @@ class Micex {
    * is selected from data) */
   static securitiesMarketdata(engine = required('engine'),
     market = required('market'), query = {}) {
-    const ORDERING_COLUMN = 'VALTODAY';
+
+    const COLUMN = SECURITIES_ORDERING_COLUMN;
     if (!query.sort_column) {
       query.sort_order = 'desc';
-      query.sort_column = ORDERING_COLUMN;
+      query.sort_column = COLUMN;
     }
     let first = null;
     if (query.first) {
@@ -84,30 +85,40 @@ class Micex {
 
     return Micex.securitiesDataRaw(engine, market, query)
       .then((response) => {
-        let marketdata = response.marketdata;
-        let rows = marketdata.data.map(
-          (data) => arrayCombine(marketdata.columns, data));
-        //let's add calculated fields
-        Micex._securitiesCustomFields(rows);
+
+        let rows = Micex._responseToSecurities(response, {
+          engine, market
+        });
         let data = {};
         for (let row of rows) {
           let secID = row.SECID;
           //so we use board with max VALTODAY for quotes
           if (row.node.last && (!data[secID] ||
-              data[secID][ORDERING_COLUMN] < row[ORDERING_COLUMN])) {
+              data[secID][COLUMN] < row[COLUMN])) {
             data[secID] = row;
           }
         }
 
         if (first) {
           rows = _.values(data);
-          rows.sort((a, b) => b[ORDERING_COLUMN] - a[ORDERING_COLUMN]);
-
+          rows = _.sortByOrder(rows, COLUMN, 'desc');
           rows = rows.slice(0, first);
           data = _.indexBy(rows, 'SECID');
         }
         return data;
       });
+  }
+
+  static _responseToSecurities(response, requestParams) {
+    let blocks = Micex._responseToBlocks(response);
+    let securitiesInfo = blocks.securities;
+    let securities = blocks.marketdata;
+    //let's store info from securitiesInfo block
+    securities.forEach((security, index) =>
+      security.securityInfo = securitiesInfo[index]);
+
+    Micex._securitiesCustomFields(securities, requestParams);
+    return securities;
   }
 
   //not structured response with marketdata from Micex
@@ -120,61 +131,80 @@ class Micex {
   static securityDefinition(security = required('security')) {
     return Micex._request(`securities/${security}`)
       .then((response) => {
-        let security = {};
-        let description = response.description;
-        let fields = description.data.map(
-          (data) => arrayCombine(description.columns, data));
-        security.description = _.indexBy(fields, 'name');
-        let boards = response.boards;
-        fields = boards.data.map(
-          (data) => arrayCombine(boards.columns, data));
-        security.boards = _.indexBy(fields, 'boardid');
-
+        let security = Micex._responseToBlocks(response);
+        security.description = _.indexBy(security.description, 'name');
+        security.boards = _.indexBy(security.boards, 'boardid');
         return security;
       });
   }
 
   static securitiesDefinitions(query = {}) {
     return Micex._request('securities', query)
-      .then(Micex._requestParsingColumnAndData);
+      .then(Micex._responseFirstBlockToArray);
   }
 
   static boards(engine = required('engine'), market = required('market')) {
     return Micex._request(`engines/${engine}/markets/${market}/boards`)
-      .then(Micex._requestParsingColumnAndData);
+      .then(Micex._responseFirstBlockToArray);
   }
 
   static markets(engine = required('engine')) {
     return Micex._request(`engines/${engine}/markets`)
-      .then(Micex._requestParsingColumnAndData);
+      .then(Micex._responseFirstBlockToArray);
   }
 
   static engines() {
     return Micex._request('engines')
-      .then(Micex._requestParsingColumnAndData);
+      .then(Micex._responseFirstBlockToArray);
   }
 
-  // extract and combine columns and data rows into objects array
-  static _requestParsingColumnAndData(responseWrapper) {
-    let key = _.keys(responseWrapper)[0];
-    let response = responseWrapper[key];
-    let columns = response.columns;
-    let data = response.data;
-    let objects = data.map((object) => arrayCombine(columns, object));
-    return objects;
+
+  static _securitiesCustomFields(securities, requestParams) {
+    securities.forEach((security) => {
+      Micex._securityCustomFields(security, requestParams);
+    });
   }
 
-  static _securitiesCustomFields(securities) {
-    securities.forEach(Micex._securityCustomFields);
-  }
-
-  static _securityCustomFields(security) {
+  static _securityCustomFields(security, requestParams) {
     security.node = {
       last: security.LAST || security.CURRENTVALUE,
       volume: security.VALTODAY_RUR || security.VALTODAY ||
         security.VALTODAY_USD,
+      friendlyTitle: Micex._securityFriendlyTitle(security, requestParams),
       id: security.SECID
     };
+  }
+
+  static _securityFriendlyTitle(security, {
+    engine, market
+  }) {
+    let info = security.securityInfo;
+    switch (market) {
+      case 'index':
+        return info.NAME || info.SHORTNAME;
+      case 'forts':
+        return info.SECNAME || info.SHORTNAME;
+      default:
+        return info.SHORTNAME;
+    }
+  }
+
+  //call _responseBlockToArray for multiple blocks
+  static _responseToBlocks(response) {
+    return _.mapValues(response, (block) => Micex._responseBlockToArray(block));
+  }
+
+  //same as _responseToBlocks, just only parse first block
+  static _responseFirstBlockToArray(response) {
+    let key = _.keys(response)[0];
+    return Micex._responseBlockToArray(response[key]);
+  }
+
+  //combine columns and data to array of objects
+  static _responseBlockToArray(block) {
+    let rows = block.data.map(
+      (data) => arrayCombine(block.columns, data));
+    return rows;
   }
 
   static _request(method, query = {}) {
