@@ -6,7 +6,7 @@ let Test = Mocha.Test;
 let should = require('chai').should();
 
 let suite = describe('MICEX GET ALL QUOTES.', function() {
-  this.timeout(6000);
+  this.timeout(10000);
 
   before(() => {
     return Micex.index()
