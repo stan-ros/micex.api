@@ -4,6 +4,7 @@
   "description": "MICEX API ISS",
   "main": "lib/micex.js",
   "scripts": {
+    "pretest": "jshint .",
     "test": "mocha",
     "compile": "babel src --out-dir lib",
     "prepublish": "npm run compile"
@@ -25,6 +26,7 @@
   "devDependencies": {
     "babel": "^5.8.21",
     "chai": "^3.2.0",
+    "jshint": "^2.8.0",
     "mocha": "^2.2.5"
   }
 }

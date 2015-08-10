@@ -13,7 +13,7 @@ describe('MICEX. ', () => {
           data.should.be.an('object');
           data.should.have.property('engines');
           data.engines.should.have.property('data');
-        })
+        });
     });
 
     it('Engines. Should be at least 3, should have stock engine', () => {
@@ -31,15 +31,16 @@ describe('MICEX. ', () => {
           markets.should.have.length.least(5);
           let sharesMarket = markets.find(market => market.NAME === 'shares');
           should.exist(sharesMarket);
-        })
+        });
     });
 
-    it('Boards. Should return ETC board for currency/selt engine/market', () => {
+    it('Boards. Should return ETC board for currency/selt', () => {
       return Micex.boards('currency', 'selt')
         .then((boards) => {
-          let board = boards.find(board => board.boardid === 'CETS' && board.title === 'ETC');
+          let board = boards.find(board => board.boardid === 'CETS' &&
+            board.title === 'ETC');
           should.exist(board);
-        })
+        });
     });
   });
 
@@ -63,7 +64,7 @@ describe('MICEX. ', () => {
               securities.should.have.length.least(50);
               securities[0].id.should.not.be.eq(firstPageSecurites[0].id);
             });
-        })
+        });
     });
 
 
@@ -74,7 +75,7 @@ describe('MICEX. ', () => {
           should.exist(security.description);
           should.exist(security.boards);
           should.exist(security.boards.CETS);
-        })
+        });
     });
   });
 
@@ -91,7 +92,7 @@ describe('MICEX. ', () => {
           should.exist(response.marketdata.data);
           response.marketdata.data.should.have.length.least(50);
         });
-    })
+    });
 
     it('Should return only 10 rows', () => {
       return Micex.securitiesDataRaw('currency', 'selt', {
@@ -123,7 +124,8 @@ describe('MICEX. ', () => {
     });
 
     it('Should return marketdata for one security', () => {
-      return Micex.securityMarketdataExplicit('currency', 'selt', 'USD000UTSTOM')
+      return Micex.securityMarketdataExplicit(
+          'currency', 'selt', 'USD000UTSTOM')
         .then((security) => {
           should.exist(security);
           //last price
@@ -146,7 +148,7 @@ describe('MICEX. ', () => {
   describe('Marketdata specific securities. ', () => {
     function securityPrint(security) {
       return;
-      console.log(`${security.node.id} price: ${security.node.last}`);
+      // console.log(`${security.node.id} price: ${security.node.last}`);
     }
 
     it('USD Today', () => {
