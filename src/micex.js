@@ -110,12 +110,15 @@ class Micex {
   }
 
   static _responseToSecurities(response, requestParams) {
+    function indexBy(row) {
+      return `${row.SECID}_${row.BOARDID}`;
+    }
     let blocks = Micex._responseToBlocks(response);
-    let securitiesInfo = blocks.securities;
+    let securitiesInfoIndex = _.indexBy(blocks.securities, indexBy);
     let securities = blocks.marketdata;
     //let's store info from securitiesInfo block
     securities.forEach((security, index) =>
-      security.securityInfo = securitiesInfo[index]);
+      security.securityInfo = securitiesInfoIndex[indexBy(security)]);
 
     Micex._securitiesCustomFields(securities, requestParams);
     return securities;
@@ -185,6 +188,7 @@ class Micex {
     engine, market
   }) {
     let info = security.securityInfo;
+    if (!info) return security.SECID;
     switch (market) {
       case 'index':
         return info.NAME || info.SHORTNAME;

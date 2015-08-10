@@ -2,8 +2,8 @@ import Micex from '../src/micex';
 import _ from 'lodash';
 let should = require('chai').should();
 
-describe('MICEX. ', () => {
-  describe('General. ', () => {
+describe('MICEX.', () => {
+  describe('General.', () => {
 
     it('General request', () => {
       should.exist(Micex);
@@ -57,7 +57,7 @@ describe('MICEX. ', () => {
     });
   });
 
-  describe('Securities. ', () => {
+  describe('Securities.', () => {
 
     it('Should contains at least 50 securities', () => {
       return Micex.securitiesDefinitions()
@@ -92,7 +92,7 @@ describe('MICEX. ', () => {
     });
   });
 
-  describe('Marketdata. ', () => {
+  describe('Marketdata.', () => {
 
     it('Should have securities data for currency/selt', () => {
       return Micex.securitiesDataRaw('currency', 'selt')
@@ -158,7 +158,7 @@ describe('MICEX. ', () => {
     });
   });
 
-  describe('Marketdata specific securities. ', () => {
+  describe('Marketdata specific securities.', () => {
     function securityPrint(security) {
       // console.log(security.node);
       return;
