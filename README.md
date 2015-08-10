@@ -51,6 +51,7 @@ Micex.securityMarketdata('RIZ5'); //FUTURES RTS 12.15
 
 ## Available methods
 ```js
+Micex.index;
 Micex.engines;
 Micex.markets(engine);
 Micex.boards(engine, market);

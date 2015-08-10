@@ -16,6 +16,19 @@ describe('MICEX. ', () => {
         });
     });
 
+    it('Index request. Should have engines, markets, boards', () => {
+        return Micex.index()
+          .then((blocks) => {
+              should.exist(blocks);
+              should.exist(blocks.engines);
+              should.exist(blocks.markets);
+              should.exist(blocks.boards);
+              blocks.engines.should.have.length.least(5);
+              blocks.markets.should.have.length.least(10);
+              blocks.boards.should.have.length.least(20);
+          });
+    });
+
     it('Engines. Should be at least 3, should have stock engine', () => {
       return Micex.engines()
         .then((engines) => {

@@ -7,7 +7,7 @@ function required(parameter = '') {
   throw `Missing ${parameter} parameter`;
 }
 
-const API_BASE = 'http://www.micex.ru/iss/';
+const API_BASE = 'http://www.micex.ru/iss';
 const SECURITY_INFO = {};
 const SECURITIES_ORDERING_COLUMN = 'VALTODAY';
 
@@ -158,6 +158,12 @@ class Micex {
       .then(Micex._responseFirstBlockToArray);
   }
 
+  // global constants
+  static index() {
+    return Micex._request('')
+      .then(Micex._responseToBlocks);
+  }
+
 
   static _securitiesCustomFields(securities, requestParams) {
     securities.forEach((security) => {
@@ -208,8 +214,9 @@ class Micex {
   }
 
   static _request(method, query = {}) {
+    let BASE = method ? API_BASE + '/' : API_BASE;
     return new Promise((resolve, reject) => {
-      request(`${API_BASE}${method}.json`, {
+      request(`${BASE}${method}.json`, {
         qs: query
       }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
