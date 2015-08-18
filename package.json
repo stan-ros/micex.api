@@ -1,6 +1,6 @@
 {
   "name": "micex.api",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "MICEX API ISS",
   "main": "lib/micex.js",
   "scripts": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/sklyukin/micex.api#readme",
   "dependencies": {
+    "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "request": "^2.60.0"
   },

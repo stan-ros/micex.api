@@ -2,6 +2,7 @@
 import arrayCombine from './array_combine';
 import request from 'request';
 import _ from 'lodash';
+let debug = require('debug')('micex.api');
 
 function required(parameter = '') {
   throw `Missing ${parameter} parameter`;
@@ -185,7 +186,7 @@ class Micex {
     };
     //in case market closed for today or there are no deals for this security
     let info = security.securityInfo;
-    if (!security.node.last && info){
+    if (!security.node.last && info) {
       security.node.last = info.PREVPRICE;
     }
   }
@@ -230,7 +231,15 @@ class Micex {
         qs: query
       }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-          resolve(JSON.parse(body));
+          let json;
+          try {
+            json = JSON.parse(body);
+          } catch (e) {
+            debug('Unable to parse body');
+            debug(body);
+            return reject(e);
+          }
+          resolve(json);
         } else {
           error = error || (response.statusCode + ' ' + response.statusMessage);
           reject(error);
