@@ -1,4 +1,4 @@
-# Micex API [![Build Status](https://travis-ci.org/sklyukin/micex.api.svg?branch=master)](https://travis-ci.org/sklyukin/micex.api)
+# Micex API / ММВБ API [![Build Status](https://travis-ci.org/sklyukin/micex.api.svg?branch=master)](https://travis-ci.org/sklyukin/micex.api)
 
 
 Micex (MOEX) ISS API  

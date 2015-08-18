@@ -54,6 +54,7 @@ class Micex {
         let rows = Micex._responseToSecurities(response, {
           engine, market
         });
+        rows = rows.filter(row => row.node.last);
         rows = _.sortByOrder(rows, SECURITIES_ORDERING_COLUMN, 'desc');
         if (!rows.length) return null;
         return rows[0];
@@ -182,6 +183,11 @@ class Micex {
       friendlyTitle: Micex._securityFriendlyTitle(security, requestParams),
       id: security.SECID
     };
+    //in case market closed for today or there are no deals for this security
+    let info = security.securityInfo;
+    if (!security.node.last && info){
+      security.node.last = info.PREVPRICE;
+    }
   }
 
   static _securityFriendlyTitle(security, {
